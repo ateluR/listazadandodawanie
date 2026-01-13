@@ -1,17 +1,23 @@
 package com.onaar.listalubkalendarz;
 
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -50,6 +56,33 @@ public class MainActivity extends AppCompatActivity {
                         items.add(rzeczDozrobienia);
                         arrayAdapter.notifyDataSetChanged();
                         input.setText("");
+                    }
+                }
+        );
+        listView.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        view.setBackgroundColor(Color.GRAY);
+                        TextView textView = (TextView) view;
+                        textView.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+                        if(textView.getPaintFlags()==Paint.STRIKE_THRU_TEXT_FLAG){
+                            textView.setPaintFlags(Paint.ANTI_ALIAS_FLAG);
+                        }
+                        else{
+
+                            textView.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+                        }
+                    }
+                }
+        );
+        listView.setOnItemClickListener(
+                new AdapterView.OnItemLongClickListener() {
+                    @Override
+                    public boolean onItemLongClick(AdapterView<?> parent, View view, int i, long i) {
+                        items.remove(i);
+                        arrayAdapter.notifyDataSetChanged();
+                        return false;
                     }
                 }
         );
