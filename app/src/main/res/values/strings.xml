@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">listalubkalendarz</string>
+    <string-array name="piorytet">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
 </resources>

@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -23,10 +24,12 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     ListView listView;
-    ArrayList<String> items;
-    ArrayAdapter<String> arrayAdapter;
+    ArrayList<Todo> items;
+    ArrayAdapter<Todo> arrayAdapter;
     EditText input;
     Button enter;
+
+   private Spinner spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,24 +39,25 @@ public class MainActivity extends AppCompatActivity {
 
         listView = findViewById(R.id.listview);
         input = findViewById(R.id.editTextText);
-        enter = findViewById(R.id.button);
+        spinner = findViewById(R.id.spinner);
 
         items = new ArrayList<>();
-        items.add("Zakupy: chlep, masło, ser");
-        items.add("Do zrobienia: obiad, umyć podłogi");
-        items.add("weekend: kino, spacer z psem");
+        items.add(new Todo("Zakupy: chlep, masło, ser", (byte) 1));
+        items.add(new Todo("Do zrobienia: obiad, umyć podłogi", (byte) 2));
+        items.add(new Todo("weekend: kino, spacer z psem", (byte) 0));
 
         arrayAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1,
                 items);
 
-        listView.setAdapter(arrayAdapter);
+       listView.setAdapter(arrayAdapter);
         enter.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         String rzeczDozrobienia = input.getText().toString();
-                        items.add(rzeczDozrobienia);
+                        byte piorytetRzeczy  = (byte)spinner.getSelectedItemPosition();
+                       items.add(new Todo(rzeczDozrobienia, piorytetRzeczy));
                         arrayAdapter.notifyDataSetChanged();
                         input.setText("");
                     }
@@ -66,12 +70,16 @@ public class MainActivity extends AppCompatActivity {
                         view.setBackgroundColor(Color.GRAY);
                         TextView textView = (TextView) view;
                         textView.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-                        if(textView.getPaintFlags()==Paint.STRIKE_THRU_TEXT_FLAG){
+                        if(items.get(i).isCzyWykonane())
+                        {
+
                             textView.setPaintFlags(Paint.ANTI_ALIAS_FLAG);
+                            items.get(i).setCzyWykonane(false);
                         }
                         else{
-
                             textView.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+                            items.get(i).setCzyWykonane(true);
+
                         }
                     }
                 }
